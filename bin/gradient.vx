@@ -13,7 +13,7 @@ var skif = packed load filename
 let row_major = 0 .. 15 map { packed byte  v       * 16^3 } per packed
 let col_minor = 0 .. 15 map { packed byte (v * 16) * 16   } per packed
 
-let rows_major = -row_major
+let rows_major = row_major
 let cols_minor = col_minor * 256
 
 let image = rows_major ~ cols_minor
@@ -22,9 +22,9 @@ let meta = skif[ image.size -> skif.size ]
 
 def encode (x) { u16.encode (x * (1 + 16 + 16^2 + 16^3)) }
 
-def r (x) { ~(encode (x mod 16)) }
+def r (x) {   encode (x mod 16)  }
 def g (x) { ~(encode (x div 16)) }
-def b (x) {   encode (x mod 16)  }
+def b (x) { ~(encode (x mod 16)) }
 
 let colors = 0 .. 255 map {x"0000", (r, g, b) v} per packed
 
